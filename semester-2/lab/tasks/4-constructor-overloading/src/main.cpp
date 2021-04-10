@@ -248,6 +248,13 @@ public:
 		return ePassed;
 	}
 
+
+	void mProcessLastLine()
+	{
+		int checkedResult;
+	}
+
+
 	void mDisplay()
 	{
 		if (mDisplayFlag)
