@@ -1,5 +1,7 @@
+// P<PAKANWAR<<SHAHAB<<<<<<<<<<<<<<<<<<<<<<<<<<
 #include <iostream>
 #include <cctype>
+#include <algorithm>
 
 class Passport
 {
@@ -99,9 +101,10 @@ public:
 		mLastLine = lastLine;
 	}
 
+
 	void mProcessFirstLine()
 	{
-		int checkedResult = checkFirstDigit(mFirstLine[0]);
+		int checkedResult = mCheckFirstDigit(mFirstLine[0]);
 		if (checkedResult == eInvalidCharacters)
 		{
 			std::cout << "Incorrect First Digit, only alphabets are allowed.\n";
@@ -111,7 +114,7 @@ public:
 			mFirstDigit = mFirstLine[0];
 		}
 
-		checkedResult = checkPassportType(mFirstLine[1]);
+		checkedResult = mCheckPassportType(mFirstLine[1]);
 		if (checkedResult == eInvalidCharacters)
 		{
 			std::cout << "Incorrect Passport type, only alphabets or '<' character allowed.\n";
@@ -121,7 +124,7 @@ public:
 			mPassportType = mFirstLine[1];
 		}
 
-		checkedResult = checkIssuingCountry();
+		checkedResult = mCheckIssuingCountry();
 		if (checkedResult == eInvalidCharacters)
 		{
 			std::cout << "Invalid country, Only alphabets are allowed!\n";
@@ -131,14 +134,20 @@ public:
 			mIssuingCountry = mFirstLine.substr(2, 3);
 		}
 
-		checkedResult = checkSurName();
+		checkedResult = mCheckSurName();
 		if (checkedResult == eInvalidCharacters)
 		{
 			std::cout << "Invalid sur name, Only alphabets are allowed!\n";
 		}
+
+		checkedResult = mCheckFirstName();
+		if (checkedResult == eInvalidCharacters)
+		{
+			std::cout << "Invalid first name, Only alphabets are allowed!\n";
+		}
 	}
 
-	int checkFirstDigit(char firstIndex)
+	int mCheckFirstDigit(char firstIndex)
 	{
 		if (!isalpha(firstIndex))
 		{
@@ -149,7 +158,7 @@ public:
 		return ePassed;
 	}
 
-	int checkPassportType(char type)
+	int mCheckPassportType(char type)
 	{
 		if (!isalpha(type) && type != '<')
 		{
@@ -160,7 +169,7 @@ public:
 		return ePassed;
 	}
 
-	int checkIssuingCountry()
+	int mCheckIssuingCountry()
 	{
 		for (int i = 2; i < 5; ++i)
 		{
@@ -174,7 +183,7 @@ public:
 		return ePassed;
 	}
 
-	int checkSurName()
+	int mCheckSurName()
 	{
 		int length = 0;
 		for (int i = 5; i < 44; ++i)
@@ -197,13 +206,57 @@ public:
 		return ePassed;
 	}
 
+	int mCheckFirstName()
+	{
+		int starting_index;
+		int length = 0;
+		bool found = false;
+		for (int i = 5; i < 44; ++i)
+		{
+			if (!found)
+			{
+				if (mFirstLine[i] == '<' && mFirstLine[i + 1] == '<')
+				{
+					found = true;
+					starting_index = i + 1;
+					std::cout << starting_index << std::endl;
+					continue;
+				}
+			}
+
+			if (found)
+			{
+				if (mFirstLine[i] == '<' && mFirstLine[i + 1] == '<')
+				{
+					break;
+				}
+
+				if (!isalpha(mFirstLine[i]) && mFirstLine[i] != '<')
+				{
+					mDisplayFlag = false;
+					return eInvalidCharacters;
+				}
+
+				++length;
+			}
+
+
+		}
+
+		mFirstName = mFirstLine.substr(starting_index, length);
+		mFirstName.erase(std::remove(mFirstName.begin(), mFirstName.end(), '<'), mFirstName.end());
+		return ePassed;
+	}
+
 	void mDisplay()
 	{
 		if (mDisplayFlag)
 		{
 			std::cout << "Your details\n"
 					  << "Passport Type: " << mFirstDigit << std::endl
-					  << "Issuing Country: " << mIssuingCountry << std::endl;
+					  << "Issuing Country: " << mIssuingCountry << std::endl
+					  << "First Name: " << mFirstName << std::endl
+					  << "Sur Name: " << mLastName << std::endl;
 		}
 	}
 };
