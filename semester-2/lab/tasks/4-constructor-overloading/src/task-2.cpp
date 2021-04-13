@@ -1,5 +1,5 @@
 // P<PAKANWAR<<SHAHAB<<<<<<<<<<<<<<<<<<<<<<<<<<
-// AD17924316PAK7604119M09112564250115662437<04
+// AD17924316PAK7604119M09112566110115662437<04
 
 #include <iostream>
 #include <cctype>
@@ -56,6 +56,11 @@ public:
 		mNationality = nationality;
 		mPassportNumber = passportNumber;
 	}
+
+    Passport (const Passport& p)
+    {
+        mCitizenNumber = p.mCitizenNumber;
+    }
 
 	void mSetMachineReadableCode()
 	{
@@ -456,19 +461,12 @@ int main()
 		passport1.mProcessLastLine();
 		passport1.mDisplay();
 
-		std::cout << "\nPassport Two\n";
-		Passport passport2("Raahim", "Fareed");
-		passport2.mSetMachineReadableCode();
-		passport2.mProcessFirstLine();
-		passport2.mProcessLastLine();
-		passport2.mDisplay();
+        std::cout << std::endl;
 
-		std::cout << "\nPassport Three\n";
-		Passport passport3('F', "IND", "FE9018374");
-		passport3.mSetMachineReadableCode();
-		passport3.mProcessFirstLine();
-		passport3.mProcessLastLine();
-		passport3.mDisplay();
+        Passport p2 = passport1;
+        p2.mDisplay();
+
+
 
 		std::cout << "Would you like to run the program again? [Y]es / [N]o\n";
 		std::cin >> userInput;
